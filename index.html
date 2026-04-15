@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hol az 1000 forintos benzin?</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛽</text></svg>">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d0d0e 0%, #1a1a1d 100%);
+            color: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .header-text {
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(#fff, #aaa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 40px;
+        }
+        .date-text {
+            font-size: 1rem;
+            color: #888;
+            font-weight: 500;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .counter-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        .counter-box {
+            padding: 15px;
+            width: 75px;
+            text-align: center;
+            border-radius: 20px;
+        }
+        .number {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 0;
+            color: #ffffff;
+        }
+        .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #a1a1a6;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+        .games-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 50px;
+        }
+        .game-card {
+            flex: 1 1 300px;
+            max-width: 350px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+        .game-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0 0 10px 0;
+        }
+        .game-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            color: #00f2fe;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+            margin: 0;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .game-message {
+            font-size: 0.9rem;
+            font-weight: 500;
+            min-height: 20px;
+            color: #ff3b30;
+        }
+        .ios-btn {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            color: #ffffff;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .ios-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        .ios-btn:active {
+            transform: scale(0.96);
+        }
+        .btn-action {
+            background: rgba(10, 132, 255, 0.2);
+            border-color: rgba(10, 132, 255, 0.4);
+            color: #5ac8fa;
+        }
+        .btn-youtube:hover { border-color: rgba(255, 0, 0, 0.5); box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2); }
+        .btn-tiktok:hover { border-color: rgba(0, 242, 254, 0.5); box-shadow: 0 8px 25px rgba(0, 242, 254, 0.2); }
+        .social-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .social-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .info-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            padding: 0;
+            z-index: 100;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-title {
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .modal-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #d2d2d7;
+            margin-bottom: 20px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #fff; }
+        .g3-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+        .g3-btn {
+            font-size: 1.5rem;
+            padding: 15px 0;
+            width: 100%;
+        }
+        .footer-disclaimer {
+            margin-top: auto;
+            padding-top: 40px;
+            font-size: 0.75rem;
+            color: #555;
+            text-align: center;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <button class="ios-btn info-btn" onclick="openModal()">❔</button>
+    
+    <div class="modal-overlay" id="infoModal" onclick="closeModal(event)">
+        <div class="glass-panel modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal(event)">&times;</button>
+            <h2 class="modal-title">Mi ez az oldal? ⛽</h2>
+            <div class="modal-body">
+                <p>Ezt az oldalt poénból (szatirikus céllal) hoztuk létre. Sokan ijesztgettek azzal, hogy az egekbe fog szökni az üzemanyag ára.</p>
+                <p>A fenti számláló pontosan azt mutatja, hogy mennyi ideje <i>"várjuk"</i> a beígért, 1000 forintos benzinárat (2026. április 13-tól számítva).</p>
+                <p>Mivel ebből szerencsére eddig nem lett valóság, gondoltuk, állítsunk neki egy kis digitális emlékművet. Jó szórakozást a minijátékokhoz!</p>
+            </div>
+            <button class="ios-btn" onclick="closeModal(event)">Értem, köszi!</button>
+        </div>
+    </div>
+
+    <h1 class="header-text">⛽ Már ennyi ideje várjuk az 1000 forintos benzinárat 💸</h1>
+    <div class="date-text">2026. 04. 13. - <span id="current-date"></span></div>
+
+    <div class="counter-container">
+        <div class="glass-panel counter-box"><p class="number" id="years">00</p><p class="label">Év</p></div>
+        <div class="glass-panel counter-box"><p class="number" id="months">00</p><p class="label">Hónap</p></div>
+        <div class="glass-panel counter-box"><p class="number" id="days">00</p><p class="label">Nap</p></div>
+        <div class="glass-panel counter-box"><p class="number" id="hours">00</p><p class="label">Óra</p></div>
+        <div class="glass-panel counter-box"><p class="number" id="minutes">00</p><p class="label">Perc</p></div>
+        <div class="glass-panel counter-box"><p class="number" id="seconds">00</p><p class="label">Másodperc</p></div>
+    </div>
+
+    <div class="games-wrapper">
+        <div class="glass-panel game-card">
+            <h3 class="game-title">🎯 Állítsd meg 1000-nél!</h3>
+            <div style="font-size: 0.8rem; color: #aaa;">Légy pontos, mielőtt drága lesz!</div>
+            <div class="game-value" id="g1Price">600 Ft</div>
+            <div class="game-message" id="g1Msg"></div>
+            <button class="ios-btn btn-action" id="g1Btn" onclick="actionG1()">INDÍTÁS</button>
+        </div>
+
+        <div class="glass-panel game-card">
+            <h3 class="game-title">⏱️ Pániktankolás</h3>
+            <div style="font-size: 0.8rem; color: #aaa;">Kattints gyorsan 5 másodperc alatt!</div>
+            <div class="game-value" id="g2Score">0 liter</div>
+            <div class="game-message" id="g2Msg" style="color: #aaa;">Indításra vár...</div>
+            <button class="ios-btn btn-action" id="g2Btn" onclick="actionG2()">INDÍTÁS</button>
+        </div>
+
+        <div class="glass-panel game-card">
+            <h3 class="game-title">🔍 Kutaskereső</h3>
+            <div style="font-size: 0.8rem; color: #aaa;">Melyik kúton maradt olcsó benzin?</div>
+            <div class="g3-grid">
+                <button class="ios-btn g3-btn" id="g3Btn0" onclick="actionG3(0)">⛽</button>
+                <button class="ios-btn g3-btn" id="g3Btn1" onclick="actionG3(1)">⛽</button>
+                <button class="ios-btn g3-btn" id="g3Btn2" onclick="actionG3(2)">⛽</button>
+                <button class="ios-btn g3-btn" id="g3Btn3" onclick="actionG3(3)">⛽</button>
+                <button class="ios-btn g3-btn" id="g3Btn4" onclick="actionG3(4)">⛽</button>
+                <button class="ios-btn g3-btn" id="g3Btn5" onclick="actionG3(5)">⛽</button>
+            </div>
+            <div class="game-message" id="g3Msg" style="color: #aaa; margin-top: 15px;">Válaszd ki az egyiket!</div>
+        </div>
+    </div>
+
+    <div class="social-container">
+        <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;">Itt tudsz követni és támogatni:</div>
+        <div class="social-buttons">
+            <a href="https://www.youtube.com/@projectflat4hungary" target="_blank" class="ios-btn btn-youtube" style="width: auto;">▶️ YouTube feliratkozás</a>
+            <a href="https://www.tiktok.com/@projectflat4hungary/" target="_blank" class="ios-btn btn-tiktok" style="width: auto;">🎵 TikTok követés</a>
+        </div>
+    </div>
+
+    <div class="footer-disclaimer">
+        Tulajdonos: @projectflat4hungary. A weboldal és annak kódja szabadon felhasználható saját célra, de üzleti célokra vagy átverésre felhasználni SZIGORÚAN TILOS!
+    </div>
+
+    <script>
+        const startDate = new Date("2026-04-13T08:03:00").getTime();
+        function updateCounter() {
+            const now = new Date();
+            const difference = now.getTime() - startDate;
+            document.getElementById("current-date").innerText = now.toLocaleDateString('hu-HU', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            document.getElementById("years").innerText = "00";
+            document.getElementById("months").innerText = "00";
+            document.getElementById("days").innerText = Math.floor(difference / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((difference % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        const modal = document.getElementById('infoModal');
+        function openModal() {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+        function closeModal(e) {
+            if(e.target === modal || e.target.tagName === 'BUTTON') {
+                modal.classList.remove('active');
+                setTimeout(() => modal.style.display = 'none', 300);
+            }
+        }
+
+        let isG1Running = false;
+        let g1Timer;
+        let currentPrice = 600;
+        const g1Price = document.getElementById('g1Price');
+        const g1Msg = document.getElementById('g1Msg');
+        const g1Btn = document.getElementById('g1Btn');
+
+        function actionG1() {
+            if(!isG1Running) {
+                isG1Running = true;
+                currentPrice = 600 + Math.floor(Math.random() * 50);
+                g1Msg.innerText = "";
+                g1Btn.innerText = "STOP!";
+                g1Btn.style.background = "rgba(255, 59, 48, 0.2)";
+                g1Btn.style.borderColor = "rgba(255, 59, 48, 0.5)";
+                g1Btn.style.color = "#ff453a";
+                g1Timer = setInterval(() => {
+                    currentPrice += Math.floor(Math.random() * 8) + 2;
+                    g1Price.innerText = currentPrice + " Ft";
+                    if(currentPrice > 1300) stopG1(true);
+                }, 70);
+            } else {
+                stopG1(false);
+            }
+        }
+        function stopG1(autoFail) {
+            isG1Running = false;
+            clearInterval(g1Timer);
+            g1Btn.innerText = "ÚJRA";
+            g1Btn.style.background = "rgba(10, 132, 255, 0.2)";
+            g1Btn.style.borderColor = "rgba(10, 132, 255, 0.4)";
+            g1Btn.style.color = "#5ac8fa";
+            if(autoFail || currentPrice > 1000) {
+                g1Msg.innerText = "Késő! Elszegényedtél... 😭";
+                g1Msg.style.color = "#ff3b30";
+            } else if (currentPrice < 1000) {
+                g1Msg.innerText = "Túl korán! Várhattál volna... 🤡";
+                g1Msg.style.color = "#ff3b30";
+            } else {
+                g1Msg.innerText = "🎉 ZSENI! Pont 1000 Ft! 🎉";
+                g1Msg.style.color = "#34c759";
+            }
+        }
+
+        let g2Clicks = 0;
+        let g2Time = 5;
+        let g2Timer;
+        let isG2Running = false;
+        let g2Cooldown = false;
+        const g2Score = document.getElementById('g2Score');
+        const g2Msg = document.getElementById('g2Msg');
+        const g2Btn = document.getElementById('g2Btn');
+
+        function actionG2() {
+            if(g2Cooldown) return;
+            if(!isG2Running) {
+                isG2Running = true;
+                g2Clicks = 0;
+                g2Time = 5;
+                g2Score.innerText = "0 liter";
+                g2Msg.innerText = g2Time + " mp maradt";
+                g2Msg.style.color = "#fff";
+                g2Btn.innerText = "PUMPÁLJ!";
+                g2Btn.style.background = "rgba(255, 149, 0, 0.2)";
+                g2Btn.style.borderColor = "rgba(255, 149, 0, 0.5)";
+                g2Btn.style.color = "#ff9f0a";
+                g2Timer = setInterval(() => {
+                    g2Time--;
+                    g2Msg.innerText = g2Time + " mp maradt";
+                    if(g2Time <= 0) {
+                        clearInterval(g2Timer);
+                        isG2Running = false;
+                        g2Cooldown = true;
+                        g2Btn.innerText = "Várj 5 másodpercet";
+                        g2Btn.style.opacity = "0.5";
+                        g2Btn.style.background = "rgba(255, 255, 255, 0.1)";
+                        g2Btn.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        g2Btn.style.color = "#aaa";
+                        g2Msg.innerText = "Idő letelt! Szép munka.";
+                        g2Msg.style.color = "#aaa";
+                        setTimeout(() => {
+                            g2Cooldown = false;
+                            g2Btn.innerText = "ÚJRA";
+                            g2Btn.style.opacity = "1";
+                            g2Btn.style.background = "rgba(10, 132, 255, 0.2)";
+                            g2Btn.style.borderColor = "rgba(10, 132, 255, 0.4)";
+                            g2Btn.style.color = "#5ac8fa";
+                        }, 5000);
+                    }
+                }, 1000);
+                clickG2();
+            } else if (g2Time > 0) {
+                clickG2();
+            }
+        }
+        function clickG2() {
+            g2Clicks++;
+            g2Score.innerText = g2Clicks + " liter";
+        }
+
+        const g3Msg = document.getElementById('g3Msg');
+        const g3Buttons = [
+            document.getElementById('g3Btn0'), document.getElementById('g3Btn1'), document.getElementById('g3Btn2'),
+            document.getElementById('g3Btn3'), document.getElementById('g3Btn4'), document.getElementById('g3Btn5')
+        ];
+        let g3Playable = true;
+
+        function actionG3(choice) {
+            if(!g3Playable) return;
+            g3Playable = false;
+            let prices = ["480 Ft 😍", "1000 Ft 😭", "Üres 💀", "800 Ft 😬", "1200 Ft 🤬", "Zárva ⛔"];
+            prices.sort(() => Math.random() - 0.5);
+            
+            for(let i=0; i<6; i++) {
+                g3Buttons[i].innerText = prices[i];
+                g3Buttons[i].style.background = "rgba(255,255,255,0.1)";
+                g3Buttons[i].style.fontSize = "0.9rem";
+            }
+            if(prices[choice] === "480 Ft 😍") {
+                g3Buttons[choice].style.background = "rgba(52, 199, 89, 0.3)";
+                g3Msg.innerText = "Mázlista! Te tankolsz!";
+                g3Msg.style.color = "#34c759";
+            } else {
+                g3Buttons[choice].style.background = "rgba(255, 59, 48, 0.3)";
+                g3Msg.innerText = "Pech! Ez bizony fájt...";
+                g3Msg.style.color = "#ff3b30";
+            }
+            setTimeout(() => {
+                for(let i=0; i<6; i++) {
+                    g3Buttons[i].innerText = "⛽";
+                    g3Buttons[i].style.background = "rgba(255, 255, 255, 0.08)";
+                    g3Buttons[i].style.fontSize = "1.5rem";
+                }
+                g3Msg.innerText = "Válaszd ki az egyiket!";
+                g3Msg.style.color = "#aaa";
+                g3Playable = true;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
